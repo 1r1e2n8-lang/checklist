@@ -105,7 +105,7 @@ async function archiveDay(dayKey){
       for(var tab of ['open','close']){
         var c=(D.checks||{})[s.id+'_'+dayKey+'_'+tab]||{};
         var staff=(D.checks||{})[s.id+'_'+dayKey+'_'+tab+'_s']||'';
-        var ho=(D.checks||{})[s.id+'_'+dayKey+'_'+tab+'_ho']||'';
+        var ho=(D.checks||{})[s.id+'_'+dayKey+'_ho']||'';
         var unchecked=s.items[tab].filter(function(item){return !c[item.id];}).map(function(item){return item.text;});
         var checked=s.items[tab].filter(function(item){return !!c[item.id];}).map(function(item){return item.text;});
         entry[tab]={staff:staff,handover:ho,unchecked:unchecked,checked:checked};
@@ -141,9 +141,9 @@ function chks(){if(!D.checks)D.checks={};var k=sid+'_'+tkey()+'_'+ctab;if(!D.che
 function togChk(id){if(editMode)return;var c=chks();c[id]=!c[id];sched();render();}
 function getStaff(){return(D.checks||{})[sid+'_'+tkey()+'_'+ctab+'_s']||'';}
 function setStaff(v){if(!D.checks)D.checks={};D.checks[sid+'_'+tkey()+'_'+ctab+'_s']=v;sched();}
-function getHO(){return(D.checks||{})[sid+'_'+tkey()+'_'+ctab+'_ho']||'';}
-function setHO(v){if(!D.checks)D.checks={};D.checks[sid+'_'+tkey()+'_'+ctab+'_ho']=v;sched();}
-function getPHO(s){var pk=pkeyFor(s);return(D.checks||{})[sid+'_'+pk+'_'+ctab+'_ho']||'';}
+function getHO(){return(D.checks||{})[sid+'_'+tkey()+'_ho']||'';}
+function setHO(v){if(!D.checks)D.checks={};D.checks[sid+'_'+tkey()+'_ho']=v;sched();}
+function getPHO(s){var pk=pkeyFor(s);return(D.checks||{})[sid+'_'+pk+'_ho']||'';}
 function getPStaff(s){var pk=pkeyFor(s);return(D.checks||{})[sid+'_'+pk+'_'+ctab+'_s']||'';}
 function getUnchk(s){
   if(!s)return[];

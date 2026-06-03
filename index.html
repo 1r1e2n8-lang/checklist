@@ -36,7 +36,10 @@ async function fbSet(path,data){
 async function fbLoad(){
   try{
     const data=await fbGet('/app');
-    if(data&&data.stores&&data.stores.length>0){D=data;}
+    if(data&&data.stores&&data.stores.length>0){
+      D=data;
+      if(!D.checks)D.checks={};
+    }
     else{
       D={stores:[{id:'s1',name:'大谷地店',items:JSON.parse(JSON.stringify(DI)),staff:[...DS]}],checks:{}};
       await fbSet('/app',D);
@@ -64,7 +67,7 @@ function badge(){
 }
 
 function st(){return D.stores.find(s=>s.id===sid)||null;}
-function chks(){const k=sid+'_'+tkey()+'_'+ctab;if(!D.checks[k])D.checks[k]={};return D.checks[k];}
+function chks(){if(!D.checks)D.checks={};const k=sid+'_'+tkey()+'_'+ctab;if(!D.checks[k])D.checks[k]={};return D.checks[k];}
 function togChk(id){const c=chks();c[id]=!c[id];sched();render();}
 function getStaff(){return D.checks[sid+'_'+tkey()+'_'+ctab+'_s']||'';}
 function setStaff(v){D.checks[sid+'_'+tkey()+'_'+ctab+'_s']=v;sched();}
@@ -89,8 +92,8 @@ function rStores(){
   if(!D.stores.length)return h+'<div class="nos">店舗がありません。追加してください。</div>';
   h+='<div class="sgrid">';
   for(const s of D.stores){
-    const od=Object.values(D.checks[s.id+'_'+tkey()+'_open']||{}).filter(Boolean).length;
-    const cd=Object.values(D.checks[s.id+'_'+tkey()+'_close']||{}).filter(Boolean).length;
+    const od=Object.values((D.checks||{})[s.id+'_'+tkey()+'_open']||{}).filter(Boolean).length;
+    const cd=Object.values((D.checks||{})[s.id+'_'+tkey()+'_close']||{}).filter(Boolean).length;
     h+='<div class="scard" onclick="sid=\''+s.id+'\';view=\'checklist\';ctab=\'open\';showAdd=false;eItem=null;showPrev=false;render()">';
     h+='<div class="sacts" onclick="event.stopPropagation()">';
     h+='<button class="ibtn" onclick="eStore={id:\''+s.id+'\',name:\''+q(s.name)+'\'};render()">&#9998;</button>';
